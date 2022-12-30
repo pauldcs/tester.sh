@@ -77,7 +77,6 @@ compare=${compare:-false}
 exit_with_error() {
     local error_message="$1"
     >&2 printf "$PROG: %s\n" "$error_message"
-    >&2 printf "$PROG: quitting...\n"
     exit 1
 }
 
@@ -94,27 +93,27 @@ output() {
 
 check_prerequisites() {
     if [ ! -x "$program_name" ]; then
-        exit_with_error "$program_name (-p): Not an executable file" 
+        exit_with_error "$program_name: Not an executable file (-p argument)" 
     fi
     
     if [ ! -d "$input_directory" ]; then
-        exit_with_error "$input_directory (-i): Not found" 
+        exit_with_error "$input_directory: Not found (-i argument)" 
     elif [ ! -r "$input_directory" ]; then
-        exit_with_error "$input_directory (-i): Not readable" 
+        exit_with_error "$input_directory: Not readable (-i argument)" 
     fi
     
     if [ -z "$(ls -A $input_directory/*.$input_file_suffix 2> /dev/null)" ]; then
-        exit_with_error "$input_directory (-i): Is empty" 
+        exit_with_error "$input_directory: Is empty (-i argument)" 
     fi
     
     if [ ! -d "$output_directory" ]; then
         mkdir -vp "$output_directory" &> /dev/null
     elif [ ! -w "$output_directory" ]; then
-        exit_with_error "$output_directory (-o): Not writable" 
+        exit_with_error "$output_directory: Not writable (-o argument)" 
     fi
     
     if [ "$run_under_valgrind" = true ] && [ ! -x "$(command -v valgrind)" ]; then
-        exit_with_error "valgrind (-v): Not found" 
+        exit_with_error "Valgrind: Not found (-v argument)" 
     fi
 }
 
@@ -191,27 +190,16 @@ run_test() {
     output "$((passed + failed + skipped)). $name"
     output "    └── Input: $input_file"
 
-    if [ "$mode" = "args-mode" ];
-        then
-            __content_as_args         \
-                "$input_file"         \
-                "$actual_output_file" \
-                "$valgrind_log_file"
-    elif [ "$mode" = "path-mode" ];
-        then
-             __file_path_as_args      \
-                "$input_file"         \
-                "$actual_output_file" \
-                "$valgrind_log_file"
-    elif [ "$mode" = "command-mode" ];
-        then
-            __file_as_command         \
-                "$input_file"         \
-                "$actual_output_file" \
-                "$valgrind_log_file"
+    func="None"
+    if   [ "$mode" = "args-mode"    ]; then func='__content_as_args'
+    elif [ "$mode" = "path-mode"    ]; then func='__file_path_as_args'
+    elif [ "$mode" = "command-mode" ]; then func='__file_as_command' 
     else
-        exit_with_error "\$mode (-m): Not supported"
+        output "    └── Status: ${ERROR_COLOR}Aborted${NO_COLOR}"
+        exit_with_error "$mode: Not supported"
     fi
+    
+    $func $input_file $actual_output_file $valgrind_log_file
     
     exit_code=$?
     
