@@ -10,28 +10,32 @@ Options
     -m   <mode>
           The mode in which to run the tests. This option is optional,
           and the default mode is "args-mode".
-          Available:
+            Available:
               - 'args-mode'
               - 'path-mode'
               - 'command-mode' 
+    
     -p   <program>
           The program to test. This option is required.
+    
     -s   <input_file_suffix>
-          The suffix of the input files. This option is optional,
-          and the default value is "in". 
+          The suffix of the input files. The default value is "in". 
+    
     -i   <input_directory>
-          The directory containing the input files. This option is optional,
-          and the default value is "infiles".
+          The directory containing the input files. The default value is "infiles".
+    
     -o   <output_directory>
           The directory to write the output files to.
-          This option is optional, and the default value is "outfiles".
-    -v   Run the tests under Valgrind. This option is optional,
-          and the default value is false.
-    -c   Do infile / outfile comparisons.
+          The default value is "outfiles".
+    
+    -v    Run the tests under Valgrind.
+  
+    -c    Do infile / outfile comparisons.
+    
     -r   <output_file>
           Redirect the output of the tests to the specified file.
-          This option is optional, and the default value is false.
-    -h   Show this usage message.
+    
+    -h    Show this usage message.
 
 EOF
 }
@@ -68,7 +72,6 @@ while getopts "p:s:i:o:m:cvr:h" opt; do
     esac
 done
 
-
 # OPTIONS
 program_name=${program_name:-$DEFAULT_PROGRAM}
 mode=${mode:-$DEFAULT_MODE}
@@ -79,8 +82,6 @@ run_under_valgrind=${run_under_valgrind:-false}
 do_redirection=${do_redirection:-false}
 compare=${compare:-false}
 
-# Takes an error message as arguments, 
-# prints it and exits with 1
 exit_with_error() {
     local error_message="$1"
     >&2 printf "$PROG: %s\n" "$error_message"
@@ -88,8 +89,6 @@ exit_with_error() {
     exit 1
 }
 
-# Writes the text into a file instead 
-# of stdout if the agrument -r was specified
 output() {
     local output="$1"
 
@@ -101,33 +100,27 @@ output() {
     fi
 }
 
-# Checks the parameters before starting the tests
 check_prerequisites() {
-    # Check that program_name is an absolute path to an executable file
     if [ ! -x "$program_name" ]; then
         exit_with_error "$program_name (-p): Not an executable file" 
     fi
 
-    # Check that input_directory exists and is readable
     if [ ! -d "$input_directory" ]; then
         exit_with_error "$input_directory (-i): Not found" 
     elif [ ! -r "$input_directory" ]; then
         exit_with_error "$input_directory (-i): Not readable" 
     fi
 
-    # Check that input_directory is not empty
     if [ -z "$(ls -A $input_directory/*.$input_file_suffix 2> /dev/null)" ]; then
         exit_with_error "$input_directory (-i): Is empty" 
     fi
 
-    # Check that output_directory exists and is writable
     if [ ! -d "$output_directory" ]; then
         mkdir -vp "$output_directory" &> /dev/null
     elif [ ! -w "$output_directory" ]; then
         exit_with_error "$output_directory (-o): Not writable" 
     fi
 
-    # Check that valgrind is installed and executable, if run_under_valgrind is set to true
     if [ "$run_under_valgrind" = true ] && [ ! -x "$(command -v valgrind)" ]; then
         exit_with_error "valgrind (-v): Not found" 
     fi
@@ -194,7 +187,6 @@ __file_as_command() {
     return $exit_code
 }
 
-# Run one test and print the results
 run_test() {
     local name="$1"
     local input_file="$2"
@@ -306,7 +298,6 @@ failed=0
 skipped=0
 memory_errors=0
 
-# Loops through the infiles in the $input_directory
 for file in "$input_directory"/*."$input_file_suffix"; 
     do
         filename=$(basename -- "$file")
@@ -319,9 +310,6 @@ for file in "$input_directory"/*."$input_file_suffix";
             "$output_directory/$test_name.valg" \
             "$input_directory/$test_name.out"
 done
-
-# print the summary of the tests
-# end exit according to the results
 
 print_summary
 

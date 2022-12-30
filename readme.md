@@ -12,9 +12,6 @@ DESCRIPTION
     options such as the name of the program to test, the suffix of the input files, 
     and the directories containing the input and expected output files.
     
-    The `-c` (compare) argument enables reports when the infile does not match the
-      outfile. 
-    
     The `-m` argument specifies the mode in which the tests should be run. 
       If the mode is "args-mode" (default), the content of the infile is passed
       as arguments to the program. 
