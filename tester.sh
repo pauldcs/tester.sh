@@ -330,12 +330,10 @@ if [ $failed -eq 0 ];
         if [ $memory_errors -eq 0 ];
             then
                 exit 0
-        else
-            exit 1
         fi
-else
-    exit 1
 fi
+
+exit 1
 
 # pducos <pducos@student.42.fr>
 # 30.12.22
