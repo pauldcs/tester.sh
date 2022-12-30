@@ -40,12 +40,6 @@ Options
 EOF
 }
 
-if [ $# -eq 0 ] ;
-    then
-        show_usage
-	    exit 1
-fi
-
 DEFAULT_PROGRAM="None"
 DEFAULT_MODE="args-mode"
 DEFAULT_INPUT_SUFFIX="in"
@@ -104,23 +98,23 @@ check_prerequisites() {
     if [ ! -x "$program_name" ]; then
         exit_with_error "$program_name (-p): Not an executable file" 
     fi
-
+    
     if [ ! -d "$input_directory" ]; then
         exit_with_error "$input_directory (-i): Not found" 
     elif [ ! -r "$input_directory" ]; then
         exit_with_error "$input_directory (-i): Not readable" 
     fi
-
+    
     if [ -z "$(ls -A $input_directory/*.$input_file_suffix 2> /dev/null)" ]; then
         exit_with_error "$input_directory (-i): Is empty" 
     fi
-
+    
     if [ ! -d "$output_directory" ]; then
         mkdir -vp "$output_directory" &> /dev/null
     elif [ ! -w "$output_directory" ]; then
         exit_with_error "$output_directory (-o): Not writable" 
     fi
-
+    
     if [ "$run_under_valgrind" = true ] && [ ! -x "$(command -v valgrind)" ]; then
         exit_with_error "valgrind (-v): Not found" 
     fi
@@ -148,6 +142,7 @@ __content_as_args() {
         | xargs                                \
         "$program_name" &> "$actual_output_file"
     fi
+
     exit_code=$?
     return $exit_code
 }
@@ -182,6 +177,7 @@ __file_as_command() {
         then
             >&2 "Notice: valgrind cannot be anabled by the tester in this mode"
     fi
+    
     $program_name $input_file &> $actual_output_file
     exit_code=$?
     return $exit_code
@@ -218,6 +214,7 @@ run_test() {
     else
         exit_with_error "\$mode (-m): Not supported"
     fi
+    
     exit_code=$?
     
     # Remove leading and trailing whitespaces from both the
@@ -232,6 +229,7 @@ run_test() {
             ((failed++))
             return
     fi
+    
     output "    └── Output: $actual_output_file"
     output "        └── Return code: $exit_code"
     
@@ -273,6 +271,7 @@ run_test() {
                 )"
             ((memory_errors++))
     fi
+    
     output ""
 }
 
