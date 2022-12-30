@@ -2,36 +2,40 @@
 
 PROG=$(basename $0)
 
+DEFAULT_PROGRAM="None"
+DEFAULT_MODE="args-mode"
+DEFAULT_INPUT_SUFFIX="in"
+DEFAULT_INPUT_DIRECTORY="infiles"
+DEFAULT_OUTPUT_DIRECTORY="outfiles"
+
 show_usage() {
     cat <<EOF
 Usage: $0 [options]
 
 Options
-    -m   <mode>
-          The mode in which to run the tests. This option is optional,
-          and the default mode is "args-mode".
-            Available:
-              - 'args-mode'
-              - 'path-mode'
-              - 'command-mode' 
+    -p   <program> (default: '$DEFAULT_PROGRAM')
+          The program to test.
     
-    -p   <program>
-          The program to test. This option is required.
+    -i   <input_directory> (default: '$DEFAULT_INPUT_DIRECTORY')
+          The directory containing the input files.
     
-    -s   <input_file_suffix>
-          The suffix of the input files. The default value is "in". 
+    -s   <input_file_suffix> (default: '$DEFAULT_INPUT_SUFFIX')
+          The suffix of the input files. 
     
-    -i   <input_directory>
-          The directory containing the input files. The default value is "infiles".
-    
-    -o   <output_directory>
+    -o   <output_directory> (default: '$DEFAULT_OUTPUT_DIRECTORY')
           The directory to write the output files to.
-          The default value is "outfiles".
     
-    -v    Run the tests under Valgrind.
+    -m   <mode> (default: '$DEFAULT_MODE')
+          The mode in which to run the tests.
+          Available modes:
+              - args-mode
+              - path-mode
+              - command-mode 
+    
+    -c    Do infile - outfile comparisons.
+    
+    -v    Run under Valgrind if available.
   
-    -c    Do infile / outfile comparisons.
-    
     -r   <output_file>
           Redirect the output of the tests to the specified file.
     
@@ -39,12 +43,6 @@ Options
 
 EOF
 }
-
-DEFAULT_PROGRAM="None"
-DEFAULT_MODE="args-mode"
-DEFAULT_INPUT_SUFFIX="in"
-DEFAULT_INPUT_DIRECTORY="infiles"
-DEFAULT_OUTPUT_DIRECTORY="outfiles"
 
 OK_COLOR=$(tput setaf 2)
 ERROR_COLOR=$(tput setaf 1)
