@@ -15,24 +15,24 @@ Usage: $0 [options]
 Options
     -p   <program> (default: '$DEFAULT_PROGRAM')
           The program to test.
-    
+
     -i   <input_directory> (default: '$DEFAULT_INPUT_DIRECTORY')
           The directory containing the input files.
-    
+
     -s   <input_file_suffix> (default: '$DEFAULT_INPUT_SUFFIX')
           The suffix of the input files. 
     
     -o   <output_directory> (default: '$DEFAULT_OUTPUT_DIRECTORY')
           The directory to write the output files to.
-    
+
     -m   <mode> (default: '$DEFAULT_MODE')
           The mode in which to run the tests.
           Available modes:
               - args-mode
               - path-mode
               - command-mode 
-    
-    -c    Do infile - outfile comparisons.
+
+        -c    Do infile - outfile comparisons.
     
     -v    Run under Valgrind if available.
   
@@ -193,16 +193,16 @@ run_test() {
     func="None"
     if   [ "$mode" = "args-mode"    ]; then func='__content_as_args'
     elif [ "$mode" = "path-mode"    ]; then func='__file_path_as_args'
-    elif [ "$mode" = "command-mode" ]; then func='__file_as_command' 
+    elif [ "$mode" = "command-mode" ]; then func='__file_as_command'
     else
         output "    └── Status: ${ERROR_COLOR}Aborted${NO_COLOR}"
         exit_with_error "$mode: Not supported"
     fi
-    
+
     $func $input_file $actual_output_file $valgrind_log_file
-    
+
     exit_code=$?
-    
+
     # Remove leading and trailing whitespaces from both the
     # expected and actual output
     # sed -i 's/^[ \t]*//;s/[ \t]*$//' "$actual_output_file"
@@ -215,20 +215,20 @@ run_test() {
             ((failed++))
             return
     fi
-    
+
     output "    └── Output: $actual_output_file"
     output "        └── Return code: $exit_code"
-    
+
     if [ "$compare" = true ];
         then
-            if cmp -s "$actual_output_file" "$expected_output_file"; 
+            if cmp -s "$actual_output_file" "$expected_output_file";
                 then
                     output "        └── Status: ${OK_COLOR}OK${NO_COLOR}"
                     ((passed++))
             else
                 output "        └── Status: ${ERROR_COLOR}KO${NO_COLOR}"
                 output "            └── Expected: $expected_output_file"
-                output "            └── Actual: $actual_output_file" 
+                output "            └── Actual: $actual_output_file"
                 output "            └── Diff:"
                 output \
                     "$(\
@@ -257,20 +257,20 @@ run_test() {
                 )"
             ((memory_errors++))
     fi
-    
+
     output ""
 }
 
 print_summary() {
-    cat << EOF                                                                                                                                
-    
-    Summary:                   
-    -----------------------------
-    Tests Passed:  $passed - $memory_errors    
-    Tests Failed:  $failed      
-    Tests Skipped: $skipped                                  
+    cat << EOF
 
-                                                     
+    Summary:
+    -----------------------------
+    Tests Passed:  $passed - $memory_errors
+    Tests Failed:  $failed
+    Tests Skipped: $skipped
+
+
 EOF
 }
 
