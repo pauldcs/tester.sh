@@ -1,12 +1,16 @@
 #!/bin/bash
 
+set -e
+#set -u
+set -o pipefail
+
 PROG=$(basename $0)
 
-DEFAULT_PROGRAM="None"
-DEFAULT_MODE="args-mode"
-DEFAULT_INPUT_SUFFIX="in"
-DEFAULT_INPUT_DIRECTORY="infiles"
-DEFAULT_OUTPUT_DIRECTORY="outfiles"
+readonly DEFAULT_PROGRAM="None"
+readonly DEFAULT_MODE="args-mode"
+readonly DEFAULT_INPUT_SUFFIX="in"
+readonly DEFAULT_INPUT_DIRECTORY="infiles"
+readonly DEFAULT_OUTPUT_DIRECTORY="outfiles"
 
 show_usage() {
     cat <<EOF
