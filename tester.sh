@@ -35,7 +35,7 @@ Options
               - path-mode
               - command-mode 
 
-        -c    Do infile - outfile comparisons.
+    -c    Do infile - outfile comparisons.
     
     -v    Run under Valgrind if available.
   
