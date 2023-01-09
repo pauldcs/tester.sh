@@ -24,3 +24,19 @@ DESCRIPTION
     which must have the ".out" suffix. The script can also be run under Valgrind to check for
     memory errors.
 ```
+# Example
+
+```sh
+bash-5.2$ cd test_suite
+bash-5.2$ tree
+.
+├── infiles
+│   ├── 00_test.in
+│   ├── 00_test.out
+│   ├── 01_test.in
+│   └── 01_test.out
+├── program_to_test
+└── tester.sh -> ../../tester.sh
+
+bash-5.2$ ./tester.sh -p program_to_test -c 
+```
