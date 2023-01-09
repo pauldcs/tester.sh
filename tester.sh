@@ -141,11 +141,11 @@ __content_as_args() {
                 --track-origins=yes                    \
                 --log-file=$valgrind_log_file          \
                 --error-exitcode=1                     \
-                "$program_name" $extra_args &> "$actual_output_file"
+                ./"$program_name" $extra_args &> "$actual_output_file"
     else
         cat "$input_file"                      \
         | xargs                                \
-        "$program_name" $extra_args &> "$actual_output_file"
+        ./"$program_name" $extra_args &> "$actual_output_file"
     fi
 
     exit_code=$?
@@ -166,9 +166,9 @@ __file_path_as_args() {
                 --track-origins=yes                                  \
                 --log-file=$valgrind_log_file                        \
                 --error-exitcode=1                                   \
-                "$program_name" $extra_args "$input_file" &> "$actual_output_file"
+                ./"$program_name" $extra_args "$input_file" &> "$actual_output_file"
     else
-        "$program_name" $extra_args "$input_file" &> "$actual_output_file"
+        ./"$program_name" $extra_args "$input_file" &> "$actual_output_file"
     fi
     exit_code=$?
     return $exit_code
@@ -183,7 +183,7 @@ __file_as_command() {
             >&2 "Notice: valgrind cannot be anabled by the tester in this mode"
     fi
     
-    $program_name $extra_args $input_file &> $actual_output_file
+    ./$program_name $extra_args $input_file &> $actual_output_file
     exit_code=$?
     return $exit_code
 }
