@@ -19,7 +19,7 @@ DESCRIPTION
       If the mode is "command-mode", the infile's content is executed.
 
     By default, the script runs the program on files with the ".in" suffix in the
-    "infiles" directory and writes the program's output to the "outfiles" directory. It then
+    "infiles" directory and writes the program's output to a new "outfiles" directory. It then
     compares the actual output with the expected output in the "infiles" directory, both of
     which must have the ".out" suffix. The script can also be run under Valgrind to check for
     memory errors.
