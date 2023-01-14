@@ -24,7 +24,7 @@ Options
           The directory containing the input files.
 
     -a   <args>
-          Arguments to pass to the program
+          Extra arguments to pass to the program.
 
     -s   <input_file_suffix> (default: '$DEFAULT_INPUT_SUFFIX')
           The suffix of the input files. 
@@ -41,12 +41,12 @@ Options
 
     -c    Do infile - outfile comparisons.
     
-    -v    Run under Valgrind if available.
+    -v    Run each test case through Valgrind.
   
     -r   <output_file>
-          Redirect the output of the tests to the specified file.
+          Redirect output (summary not included) to a file.
     
-    -h    Show this usage message.
+    -h    Show this help message.
 
 EOF
 }
@@ -72,7 +72,6 @@ while getopts "p:s:a:i:o:m:cvr:h" opt; do
     esac
 done
 
-# OPTIONS
 program_name=${program_name:-$DEFAULT_PROGRAM}
 mode=${mode:-$DEFAULT_MODE}
 input_file_suffix=${input_file_suffix:-$DEFAULT_INPUT_SUFFIX}
@@ -83,12 +82,14 @@ do_redirection=${do_redirection:-false}
 compare=${compare:-false}
 
 exit_with_error() {
+
     local error_message="$1"
     >&2 printf "$PROG: %s\n" "$error_message"
     exit 1
 }
 
 output() {
+
     local output="$1"
 
     if [ "$do_redirection" != false ];
@@ -100,6 +101,7 @@ output() {
 }
 
 check_prerequisites() {
+
     if [ ! -x "$program_name" ]; then
         exit_with_error "$program_name: Not an executable file (-p argument)" 
     fi
@@ -126,21 +128,22 @@ check_prerequisites() {
 }
 
 __content_as_args() {
+
     local input_file="$1"
     local actual_output_file="$2"
     local valgrind_log_file="$3"
 
     if [ "$run_under_valgrind" = true ];
         then
-            cat "$input_file"                          \
-            | xargs                                    \
-            valgrind                                   \
-                -q                                     \
-                --leak-check=full                      \
-                --show-leak-kinds=all                  \
-                --track-origins=yes                    \
-                --log-file=$valgrind_log_file          \
-                --error-exitcode=1                     \
+            cat "$input_file"                                        \
+            | xargs                                                  \
+            valgrind                                                 \
+                -q                                                   \
+                --leak-check=full                                    \
+                --show-leak-kinds=all                                \
+                --track-origins=yes                                  \
+                --log-file=$valgrind_log_file                        \
+                --error-exitcode=1                                   \
                 ./"$program_name" $extra_args &> "$actual_output_file"
     else
         cat "$input_file"                      \
@@ -153,19 +156,20 @@ __content_as_args() {
 }
 
 __file_path_as_args() {
+
     local input_file="$1"
     local actual_output_file="$2"
     local valgrind_log_file="$3"
 
     if [ "$run_under_valgrind" = true ];
         then
-            valgrind                                                 \
-                -q                                                   \
-                --leak-check=full                                    \
-                --show-leak-kinds=all                                \
-                --track-origins=yes                                  \
-                --log-file=$valgrind_log_file                        \
-                --error-exitcode=1                                   \
+            valgrind                                                               \
+                -q                                                                 \
+                --leak-check=full                                                  \
+                --show-leak-kinds=all                                              \
+                --track-origins=yes                                                \
+                --log-file=$valgrind_log_file                                      \
+                --error-exitcode=1                                                 \
                 ./"$program_name" $extra_args "$input_file" &> "$actual_output_file"
     else
         ./"$program_name" $extra_args "$input_file" &> "$actual_output_file"
@@ -175,6 +179,7 @@ __file_path_as_args() {
 }
 
 __file_as_command() {
+
     local input_file="$1"
     local actual_output_file="$2"
 
@@ -189,6 +194,7 @@ __file_as_command() {
 }
 
 run_test() {
+
     local name="$1"
     local input_file="$2"
     local actual_output_file="$3"
@@ -270,6 +276,7 @@ run_test() {
 }
 
 print_summary() {
+
     cat << EOF
 
     Summary:
@@ -317,4 +324,4 @@ fi
 exit 1
 
 # pducos <pducos@student.42.fr>
-# 30.12.22
+# Last updated: 14.01.23
