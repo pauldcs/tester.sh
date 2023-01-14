@@ -35,7 +35,7 @@ bash-5.2$ tree
 │   ├── 00_test.out
 │   ├── 01_test.in
 │   └── 01_test.out
-├── program_to_test
+├── program_to_test -> ../program_to_test
 └── tester.sh -> ../../tester.sh
 
 bash-5.2$ ./tester.sh -cv -p program_to_test
