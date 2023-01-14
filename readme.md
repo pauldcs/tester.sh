@@ -4,7 +4,7 @@
 
 SYNOPSIS
     ./tester.sh [-p program] [-s suffix] [-i input_directory] [-o output_directory] [-v] [-h]
-        [-c] [-r output_file] [-m mode]
+        [-c] [-a] [-r output_file] [-m mode]
 
 DESCRIPTION
     This script is used to test a program by running it on a set of input files
