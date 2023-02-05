@@ -14,7 +14,7 @@ readonly             DEFAULT_MODE="args-mode"
 readonly     DEFAULT_INPUT_SUFFIX="in"
 readonly  DEFAULT_INPUT_DIRECTORY="infiles"
 readonly DEFAULT_OUTPUT_DIRECTORY="outfiles"
-readonly          DEFAULT_TIMEOUT=2
+readonly          DEFAULT_TIMEOUT=2 #seconds
 
 #	/*------------------------------------------------------------*/
 #	/*--- Display help message                                 ---*/
@@ -268,12 +268,21 @@ function run_test() {
         then
             output "    └── Status: ${ERROR_COLOR}Incomplete${NO_COLOR}"
             output "        └── Reason: Actual output not found"
+            output ""
             ((failed++))
             return
     fi
 
     output "    └── Output: $actual_output_file"
     output "        └── Return code: $exit_code"
+
+    if [ "$exit_code" = 124 ] ;
+        then
+            output "        └── Status: ${ERROR_COLOR}TIMEOUT${NO_COLOR}"
+            output ""
+            ((failed++))
+            return 
+    fi
 
     if [ "$compare" = true ];
         then
