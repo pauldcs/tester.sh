@@ -37,5 +37,5 @@ bash-5.2$ tree
 ├── program_to_test -> ../program_to_test
 └── tester.sh -> ../../tester.sh
 
-bash-5.2$ ./tester.sh -v -p program_to_test
+bash-5.2$ ./tester.sh -p program_to_test
 ```
