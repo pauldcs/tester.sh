@@ -4,13 +4,20 @@ set -e
 #set -u
 set -o pipefail
 
-PROG=$(basename $0)
+#	/*------------------------------------------------------------*/
+#	/*--- Default variables                                    ---*/
+#	/*------------------------------------------------------------*/
 
+readonly PROG=$(basename $0)
 readonly DEFAULT_PROGRAM="None"
 readonly DEFAULT_MODE="args-mode"
 readonly DEFAULT_INPUT_SUFFIX="in"
 readonly DEFAULT_INPUT_DIRECTORY="infiles"
 readonly DEFAULT_OUTPUT_DIRECTORY="outfiles"
+
+#	/*------------------------------------------------------------*/
+#	/*--- Display help message                                 ---*/
+#	/*------------------------------------------------------------*/
 
 function show_usage() {
 
@@ -52,10 +59,18 @@ Options
 EOF
 }
 
+#	/*------------------------------------------------------------*/
+#	/*--- Get compatible colors                                ---*/
+#	/*------------------------------------------------------------*/
+
 OK_COLOR=$(tput setaf 2)
 ERROR_COLOR=$(tput setaf 1)
 BOLD_UNDERLINE=$(tput bold)$(tput smul)
 NO_COLOR=$(tput sgr0)
+
+#	/*------------------------------------------------------------*/
+#	/*--- Parse arguments and setup vars                       ---*/
+#	/*------------------------------------------------------------*/
 
 while getopts "p:s:a:i:o:m:cvr:h" opt; do
     case $opt in
@@ -82,6 +97,10 @@ run_under_valgrind=${run_under_valgrind:-false}
 do_redirection=${do_redirection:-false}
 compare=${compare:-false}
 
+#	/*------------------------------------------------------------*/
+#	/*--- Exit with `error_message`                            ---*/
+#	/*------------------------------------------------------------*/
+
 function exit_with_error() {
 
     local error_message="$1"
@@ -100,6 +119,10 @@ function output() {
         printf "%s\n" "$output"
     fi
 }
+
+#	/*------------------------------------------------------------*/
+#	/*--- Basic sanity checks                                  ---*/
+#	/*------------------------------------------------------------*/
 
 function check_prerequisites() {
 
@@ -127,6 +150,11 @@ function check_prerequisites() {
         exit_with_error "Valgrind: Not found (-v argument)" 
     fi
 }
+
+#	/*------------------------------------------------------------*/
+#	/*--- the content of the infile is passes as arguments to  ---*/
+# /*--- the program                                          ---*/
+#	/*------------------------------------------------------------*/
 
 function __args_mode() {
 
@@ -156,6 +184,10 @@ function __args_mode() {
     return $exit_code
 }
 
+#	/*------------------------------------------------------------*/
+#	/*--- The infile itself is passed to the program.          ---*/
+#	/*------------------------------------------------------------*/
+
 function __path_mode() {
 
     local input_file="$1"
@@ -179,48 +211,24 @@ function __path_mode() {
     return $exit_code
 }
 
-function __command_mode() {
-
-    local input_file="$1"
-    local actual_output_file="$2"
-
-    if [ "$run_under_valgrind" = true ];
-        then
-            >&2 "Notice: valgrind cannot be anabled by the tester in this mode"
-    fi
-    
-    ./$program_name $extra_args $input_file &> $actual_output_file
-    exit_code=$?
-    return $exit_code
-}
+#	/*------------------------------------------------------------*/
+#	/*--- Yet to be implemented                                ---*/
+#	/*------------------------------------------------------------*/
 
 #function __custom_mode() {
-
+#
 #    local input_file="$1"
 #    local actual_output_file="$2"
 #    local valgrind_log_file="$3"
 #
-#    if [ "$run_under_valgrind" = true ];
-#        then
-#            cat "$input_file"                                        \
-#            | xargs                                                  \
-#            valgrind                                                 \
-#                -q                                                   \
-#                --leak-check=full                                    \
-#                --show-leak-kinds=all                                \
-#                --track-origins=yes                                  \
-#                --log-file=$valgrind_log_file                        \
-#                --error-exitcode=1                                   \
-#                ./"$program_name" $extra_args &> "$actual_output_file"
-#    else
-#        cat "$input_file"                      \
-#        | xargs                                \
-#        ./"$program_name" $extra_args &> "$actual_output_file"
-#    fi
 #
 #    exit_code=$?
 #    return $exit_code
 #}
+
+#	/*------------------------------------------------------------*/
+#	/*--- Run the current test                                 ---*/
+#	/*------------------------------------------------------------*/
 
 function run_test() {
 
@@ -236,8 +244,7 @@ function run_test() {
     func="None"
     if   [ "$mode" = "args-mode"    ]; then func='__args_mode'
     elif [ "$mode" = "path-mode"    ]; then func='__path_mode'
-    elif [ "$mode" = "command-mode" ]; then func='__command_mode'
-    elif [ "$mode" = "custom-mode"  ]; then func='__custom_mode'
+    #elif [ "$mode" = "custom-mode"  ]; then func='__custom_mode'
     else
         output "    └── Status: ${ERROR_COLOR}Aborted${NO_COLOR}"
         exit_with_error "$mode: Not supported"
@@ -305,21 +312,27 @@ function run_test() {
     output ""
 }
 
+#	/*------------------------------------------------------------*/
+#	/*--- Display test results                                 ---*/
+#	/*------------------------------------------------------------*/
 print_summary() {
 
     cat << EOF
 
     Summary:
-    -----------------------------
-    Tests Passed:  $passed - $memory_errors
+    --------------------------- 
+    Tests Passed:  $passed
     Tests Failed:  $failed
+    Memory errors: $memory_errors
     Tests Skipped: $skipped
 
 
 EOF
 }
 
-############################ START #############################
+#	/*------------------------------------------------------------*/
+#	/*---                         ENTRY                        ---*/
+#	/*------------------------------------------------------------*/
 
 check_prerequisites
 
