@@ -177,7 +177,7 @@ function __args_mode() {
                 --leak-check=full                                    \
                 --show-leak-kinds=all                                \
                 --track-origins=yes                                  \
-                --log-file=$valgrind_log_file                        \
+                --log-file="$valgrind_log_file"                      \
                 --error-exitcode=1                                   \
                 ./"$program_name" $extra_args &> "$actual_output_file"
     else
@@ -209,7 +209,7 @@ function __path_mode() {
                 --leak-check=full                                                  \
                 --show-leak-kinds=all                                              \
                 --track-origins=yes                                                \
-                --log-file=$valgrind_log_file                                      \
+                --log-file="$valgrind_log_file"                                    \
                 --error-exitcode=1                                                 \
                 ./"$program_name" $extra_args "$input_file" &> "$actual_output_file"
     else
@@ -258,7 +258,7 @@ function run_test() {
         exit_with_error "$mode: Not supported"
     fi
 
-    $func $input_file $actual_output_file $valgrind_log_file
+    $func "$input_file" "$actual_output_file" "$valgrind_log_file"
 
     exit_code=$?
 
