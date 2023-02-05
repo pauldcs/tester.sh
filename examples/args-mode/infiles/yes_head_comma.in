@@ -1,0 +1,1 @@
+/usr/bin/yes "|" /bin/cat -e "|" /usr/bin/head ";" /usr/bin/yes "|" /bin/cat -e "|" /usr/bin/yes "|" /usr/bin/head
