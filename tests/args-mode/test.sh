@@ -1,3 +1,8 @@
+# +---------------------------------+ #
+# tester.sh                           #
+# By: pducos <pducos@student.42.fr>   #
+# +---------------------------------+ #
+
 #!/bin/bash
 
 #set -e
@@ -31,30 +36,24 @@ function show_usage() {
 
     cat <<EOF
 Usage: $0 [options]
-
 Options
     -p   <program> (default: '$DEFAULT_PROGRAM')
           The program to test.
-
     -i   <input_directory> (default: '$DEFAULT_INPUT_DIRECTORY')
           The directory containing the input files.
-
     -a   <args>
           Extra arguments to pass to the program.
-
     -s   <input_file_suffix> (default: '$DEFAULT_INPUT_SUFFIX')
           The suffix of the input files. 
     
     -o   <output_directory> (default: '$DEFAULT_OUTPUT_DIRECTORY')
           The directory to write the output files to.
-
     -m   <mode> (default: '$DEFAULT_MODE')
           The mode in which to run the tests.
           Available modes:
               - args-mode
               - path-mode
               - command-mode 
-
     -c    Don't do infile - outfile comparisons.
     
     -v    Run each test case through Valgrind.
@@ -63,19 +62,12 @@ Options
           Redirect output (summary not included) to a file.
     
     -h    Show this help message.
-
 EOF
 }
 
 #	/*------------------------------------------------------------*/
 #	/*--- Parse arguments and setup vars                       ---*/
 #	/*------------------------------------------------------------*/
-
-if [ $# -eq 0 ];
-    then
-        show_usage
-        exit 1
-fi
 
 while getopts "p:s:a:i:o:m:cvr:h" opt; do
     case $opt in
@@ -89,7 +81,7 @@ while getopts "p:s:a:i:o:m:cvr:h" opt; do
         r)     do_redirection="$OPTARG";;
         c)           compare=false;;
         h) show_usage; exit 0;;
-        \?) show_usage; exit 1;;
+        \?) exit 1;;
     esac
 done
 
@@ -336,15 +328,12 @@ function run_test() {
 print_summary() {
 
     cat << EOF
-
     Summary:
     --------------------------- 
     Tests Passed:  $passed
     Tests Failed:  $failed
     Memory errors: $memory_errors
     Tests Skipped: $skipped
-
-
 EOF
 }
 
