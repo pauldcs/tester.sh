@@ -12,7 +12,8 @@ readonly DEFAULT_INPUT_SUFFIX="in"
 readonly DEFAULT_INPUT_DIRECTORY="infiles"
 readonly DEFAULT_OUTPUT_DIRECTORY="outfiles"
 
-show_usage() {
+function show_usage() {
+
     cat <<EOF
 Usage: $0 [options]
 
@@ -81,14 +82,14 @@ run_under_valgrind=${run_under_valgrind:-false}
 do_redirection=${do_redirection:-false}
 compare=${compare:-false}
 
-exit_with_error() {
+function exit_with_error() {
 
     local error_message="$1"
     >&2 printf "$PROG: %s\n" "$error_message"
     exit 1
 }
 
-output() {
+function output() {
 
     local output="$1"
 
@@ -100,7 +101,7 @@ output() {
     fi
 }
 
-check_prerequisites() {
+function check_prerequisites() {
 
     if [ ! -x "$program_name" ]; then
         exit_with_error "$program_name: Not an executable file (-p argument)" 
@@ -127,7 +128,7 @@ check_prerequisites() {
     fi
 }
 
-__content_as_args() {
+function __args_mode() {
 
     local input_file="$1"
     local actual_output_file="$2"
@@ -155,7 +156,7 @@ __content_as_args() {
     return $exit_code
 }
 
-__file_path_as_args() {
+function __path_mode() {
 
     local input_file="$1"
     local actual_output_file="$2"
@@ -178,7 +179,7 @@ __file_path_as_args() {
     return $exit_code
 }
 
-__file_as_command() {
+function __command_mode() {
 
     local input_file="$1"
     local actual_output_file="$2"
@@ -193,7 +194,35 @@ __file_as_command() {
     return $exit_code
 }
 
-run_test() {
+#function __custom_mode() {
+
+#    local input_file="$1"
+#    local actual_output_file="$2"
+#    local valgrind_log_file="$3"
+#
+#    if [ "$run_under_valgrind" = true ];
+#        then
+#            cat "$input_file"                                        \
+#            | xargs                                                  \
+#            valgrind                                                 \
+#                -q                                                   \
+#                --leak-check=full                                    \
+#                --show-leak-kinds=all                                \
+#                --track-origins=yes                                  \
+#                --log-file=$valgrind_log_file                        \
+#                --error-exitcode=1                                   \
+#                ./"$program_name" $extra_args &> "$actual_output_file"
+#    else
+#        cat "$input_file"                      \
+#        | xargs                                \
+#        ./"$program_name" $extra_args &> "$actual_output_file"
+#    fi
+#
+#    exit_code=$?
+#    return $exit_code
+#}
+
+function run_test() {
 
     local name="$1"
     local input_file="$2"
@@ -205,9 +234,10 @@ run_test() {
     output "    └── Input: $input_file"
 
     func="None"
-    if   [ "$mode" = "args-mode"    ]; then func='__content_as_args'
-    elif [ "$mode" = "path-mode"    ]; then func='__file_path_as_args'
-    elif [ "$mode" = "command-mode" ]; then func='__file_as_command'
+    if   [ "$mode" = "args-mode"    ]; then func='__args_mode'
+    elif [ "$mode" = "path-mode"    ]; then func='__path_mode'
+    elif [ "$mode" = "command-mode" ]; then func='__command_mode'
+    elif [ "$mode" = "custom-mode"  ]; then func='__custom_mode'
     else
         output "    └── Status: ${ERROR_COLOR}Aborted${NO_COLOR}"
         exit_with_error "$mode: Not supported"
