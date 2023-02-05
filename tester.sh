@@ -1,3 +1,8 @@
+# +---------------------------------+ #
+# tester.sh                           #
+# By: pducos <pducos@student.42.fr>   #
+# +---------------------------------+ #
+
 #!/bin/bash
 
 #set -e
@@ -14,7 +19,7 @@ readonly             DEFAULT_MODE="args-mode"
 readonly     DEFAULT_INPUT_SUFFIX="in"
 readonly  DEFAULT_INPUT_DIRECTORY="infiles"
 readonly DEFAULT_OUTPUT_DIRECTORY="outfiles"
-readonly          DEFAULT_TIMEOUT=2 #seconds
+readonly          DEFAULT_TIMEOUT=2
 
 #	/*------------------------------------------------------------*/
 #	/*--- Display help message                                 ---*/
@@ -219,13 +224,11 @@ function __path_mode() {
 #	/*------------------------------------------------------------*/
 #	/*--- Yet to be implemented                                ---*/
 #	/*------------------------------------------------------------*/
-
 #function __custom_mode() {
 #
 #    local input_file="$1"
 #    local actual_output_file="$2"
 #    local valgrind_log_file="$3"
-#
 #
 #    exit_code=$?
 #    return $exit_code
@@ -329,6 +332,7 @@ function run_test() {
 #	/*------------------------------------------------------------*/
 #	/*--- Display test results                                 ---*/
 #	/*------------------------------------------------------------*/
+
 print_summary() {
 
     cat << EOF
@@ -381,4 +385,4 @@ fi
 exit 1
 
 # pducos <pducos@student.42.fr>
-# Last updated: 14.01.23
+# Last updated: 05.02.23
