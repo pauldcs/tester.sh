@@ -16,7 +16,6 @@ DESCRIPTION
       If the mode is "args-mode" (default), the content of the infile is passed
       as arguments to the program. 
       If the mode is "path-mode", the path to the infile is passed as arguments to the program.
-      If the mode is "command-mode", the infile's content is executed.
 
     By default, the script runs the program on files with the ".in" suffix in the
     "infiles" directory and writes the program's output to a new "outfiles" directory. It then
