@@ -1,19 +1,20 @@
 #!/bin/bash
 
-set -e
+#set -e
 #set -u
-set -o pipefail
+#set -o pipefail
 
 #	/*------------------------------------------------------------*/
 #	/*--- Default variables                                    ---*/
 #	/*------------------------------------------------------------*/
 
-readonly PROG=$(basename $0)
-readonly DEFAULT_PROGRAM="None"
-readonly DEFAULT_MODE="args-mode"
-readonly DEFAULT_INPUT_SUFFIX="in"
-readonly DEFAULT_INPUT_DIRECTORY="infiles"
+readonly                     PROG=$(basename $0)
+readonly          DEFAULT_PROGRAM="None"
+readonly             DEFAULT_MODE="args-mode"
+readonly     DEFAULT_INPUT_SUFFIX="in"
+readonly  DEFAULT_INPUT_DIRECTORY="infiles"
 readonly DEFAULT_OUTPUT_DIRECTORY="outfiles"
+readonly          DEFAULT_TIMEOUT=2
 
 #	/*------------------------------------------------------------*/
 #	/*--- Display help message                                 ---*/
@@ -74,28 +75,28 @@ NO_COLOR=$(tput sgr0)
 
 while getopts "p:s:a:i:o:m:cvr:h" opt; do
     case $opt in
-        p) program_name="$OPTARG";;
-        m) mode="$OPTARG";;
-        a) extra_args="$OPTARG";;
-        s) input_file_suffix="$OPTARG";;
-        i) input_directory="$OPTARG";;
-        o) output_directory="$OPTARG";;
+        p)       program_name="$OPTARG";;
+        m)               mode="$OPTARG";;
+        a)         extra_args="$OPTARG";;
+        s)  input_file_suffix="$OPTARG";;
+        i)    input_directory="$OPTARG";;
+        o)   output_directory="$OPTARG";;
         v) run_under_valgrind=true;;
-        r) do_redirection="$OPTARG";;
-        c) compare=true;;
+        r)     do_redirection="$OPTARG";;
+        c)           compare=true;;
         h) show_usage; exit 0;;
         \?) exit 1;;
     esac
 done
 
-program_name=${program_name:-$DEFAULT_PROGRAM}
-mode=${mode:-$DEFAULT_MODE}
-input_file_suffix=${input_file_suffix:-$DEFAULT_INPUT_SUFFIX}
-input_directory=${input_directory:-$DEFAULT_INPUT_DIRECTORY}
-output_directory=${output_directory:-$DEFAULT_OUTPUT_DIRECTORY}
+      program_name=${program_name:-$DEFAULT_PROGRAM}
+              mode=${mode:-$DEFAULT_MODE}
+ input_file_suffix=${input_file_suffix:-$DEFAULT_INPUT_SUFFIX}
+   input_directory=${input_directory:-$DEFAULT_INPUT_DIRECTORY}
+  output_directory=${output_directory:-$DEFAULT_OUTPUT_DIRECTORY}
 run_under_valgrind=${run_under_valgrind:-false}
-do_redirection=${do_redirection:-false}
-compare=${compare:-false}
+    do_redirection=${do_redirection:-false}
+           compare=${compare:-false}
 
 #	/*------------------------------------------------------------*/
 #	/*--- Exit with `error_message`                            ---*/
@@ -164,6 +165,7 @@ function __args_mode() {
 
     if [ "$run_under_valgrind" = true ];
         then
+            timeout $DEFAULT_TIMEOUT                                 \
             cat "$input_file"                                        \
             | xargs                                                  \
             valgrind                                                 \
@@ -175,6 +177,7 @@ function __args_mode() {
                 --error-exitcode=1                                   \
                 ./"$program_name" $extra_args &> "$actual_output_file"
     else
+        timeout $DEFAULT_TIMEOUT               \
         cat "$input_file"                      \
         | xargs                                \
         ./"$program_name" $extra_args &> "$actual_output_file"
@@ -196,6 +199,7 @@ function __path_mode() {
 
     if [ "$run_under_valgrind" = true ];
         then
+            timeout $DEFAULT_TIMEOUT                                               \
             valgrind                                                               \
                 -q                                                                 \
                 --leak-check=full                                                  \
@@ -205,6 +209,7 @@ function __path_mode() {
                 --error-exitcode=1                                                 \
                 ./"$program_name" $extra_args "$input_file" &> "$actual_output_file"
     else
+        timeout $DEFAULT_TIMEOUT                                           \
         ./"$program_name" $extra_args "$input_file" &> "$actual_output_file"
     fi
     exit_code=$?
