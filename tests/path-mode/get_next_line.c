@@ -91,7 +91,7 @@ char *get_next_line(int fd);
 int	main(int ac, char **av) {
 	char	*line;
 	int 	fd;
-	while(1);
+	//while(1);
 	if (ac == 2) {
 		if ((fd = open(av[1], O_RDONLY)) == -1)
 			return(fprintf(stderr, "open() error\n"), EXIT_FAILURE);

@@ -9,17 +9,24 @@
 #set -u
 #set -o pipefail
 
+readonly PROG=$(basename $0)
+
 #	/*------------------------------------------------------------*/
-#	/*--- Default variables                                    ---*/
+#	/*--- CONFIG                                               ---*/
+#	/*--- (Most of these can be changed with arguments)        ---*/
 #	/*------------------------------------------------------------*/
 
-readonly                     PROG=$(basename $0)
 readonly          DEFAULT_PROGRAM="None"
 readonly             DEFAULT_MODE="args-mode"
 readonly     DEFAULT_INPUT_SUFFIX="in"
 readonly  DEFAULT_INPUT_DIRECTORY="infiles"
 readonly DEFAULT_OUTPUT_DIRECTORY="outfiles"
 readonly          DEFAULT_TIMEOUT=2
+
+readonly       OK_COLOR=$(tput setaf 2) # green
+readonly    ERROR_COLOR=$(tput setaf 1) # red
+readonly BOLD_UNDERLINE=$(tput bold)$(tput smul)
+readonly       NO_COLOR=$(tput sgr0)
 
 #	/*------------------------------------------------------------*/
 #	/*--- Display help message                                 ---*/
@@ -64,15 +71,6 @@ Options
 
 EOF
 }
-
-#	/*------------------------------------------------------------*/
-#	/*--- Get compatible colors                                ---*/
-#	/*------------------------------------------------------------*/
-
-OK_COLOR=$(tput setaf 2)
-ERROR_COLOR=$(tput setaf 1)
-BOLD_UNDERLINE=$(tput bold)$(tput smul)
-NO_COLOR=$(tput sgr0)
 
 #	/*------------------------------------------------------------*/
 #	/*--- Parse arguments and setup vars                       ---*/
@@ -224,6 +222,7 @@ function __path_mode() {
 #	/*------------------------------------------------------------*/
 #	/*--- Yet to be implemented                                ---*/
 #	/*------------------------------------------------------------*/
+
 #function __custom_mode() {
 #
 #    local input_file="$1"
@@ -384,5 +383,4 @@ fi
 
 exit 1
 
-# pducos <pducos@student.42.fr>
-# Last updated: 05.02.23
+# Last update: 05.02.23
