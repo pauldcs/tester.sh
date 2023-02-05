@@ -53,7 +53,7 @@ Options
               - path-mode
               - command-mode 
 
-    -c    Do infile - outfile comparisons.
+    -c    Don't do infile - outfile comparisons.
     
     -v    Run each test case through Valgrind.
   
@@ -88,7 +88,7 @@ while getopts "p:s:a:i:o:m:cvr:h" opt; do
         o)   output_directory="$OPTARG";;
         v) run_under_valgrind=true;;
         r)     do_redirection="$OPTARG";;
-        c)           compare=true;;
+        c)           compare=false;;
         h) show_usage; exit 0;;
         \?) exit 1;;
     esac
@@ -101,7 +101,7 @@ done
   output_directory=${output_directory:-$DEFAULT_OUTPUT_DIRECTORY}
 run_under_valgrind=${run_under_valgrind:-false}
     do_redirection=${do_redirection:-false}
-           compare=${compare:-false}
+           compare=${compare:-true}
 
 #	/*------------------------------------------------------------*/
 #	/*--- Exit with `error_message`                            ---*/
