@@ -1,0 +1,1 @@
+echo a > /dev/stdout > /dev/stdout > /dev/stdout > /dev/stdout | cat -e | cat | cat > /dev/stdout < /dev/stdin | rev

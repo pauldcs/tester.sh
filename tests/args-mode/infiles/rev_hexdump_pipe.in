@@ -1,1 +1,0 @@
-/bin/echo abcdefg "|" /usr/bin/head -c 1 "|" /bin/cat -e "|" /usr/bin/rev "|" /usr/bin/hexdump "|" /usr/bin/hexdump -C

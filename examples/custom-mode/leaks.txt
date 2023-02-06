@@ -1,0 +1,25 @@
+{
+   name
+   Memcheck:Cond
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
+}
+
+{
+   name
+   Memcheck:Free
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
+}
+
+{
+   name
+   Memcheck:Value8
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
+}
+{
+   name
+   Memcheck:Leak
+   fun:*alloc
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
+   ...
+}

@@ -221,18 +221,34 @@ function __path_mode() {
 }
 
 #	/*------------------------------------------------------------*/
-#	/*--- Yet to be implemented                                ---*/
+#	/*--- Random custom tests                                  ---*/
+#	/*--- Currently set up for minishell                       ---*/
 #	/*------------------------------------------------------------*/
 
-#function __custom_mode() {
-#
-#    local input_file="$1"
-#    local actual_output_file="$2"
-#    local valgrind_log_file="$3"
-#
-#    exit_code=$?
-#    return $exit_code
-#}
+function __custom_mode() {
+    local input_file="$1"
+    local actual_output_file="$2"
+    local valgrind_log_file="$3"
+    
+    if [ "$run_under_valgrind" = true ];
+        then
+            timeout $DEFAULT_TIMEOUT                         \
+            cat "$input_file"                                \
+            | valgrind                                       \
+                -q                                           \
+                --leak-check=full                            \
+                --show-leak-kinds=all                        \
+                --track-origins=yes                          \
+                --log-file="$valgrind_log_file"              \
+                --error-exitcode=1                           \
+                ./"$program_name" 2>&- > "$actual_output_file"
+    else
+        timeout $DEFAULT_TIMEOUT                                         \
+        cat "$input_file" | ./"$program_name" 2>&- > "$actual_output_file"
+    fi
+    exit_code=$?
+    return $exit_code
+}
 
 #	/*------------------------------------------------------------*/
 #	/*--- Run the current test                                 ---*/
@@ -252,7 +268,7 @@ function run_test() {
     func="None"
     if   [ "$mode" = "args-mode"    ]; then func='__args_mode'
     elif [ "$mode" = "path-mode"    ]; then func='__path_mode'
-    #elif [ "$mode" = "custom-mode"  ]; then func='__custom_mode'
+    elif [ "$mode" = "custom-mode"  ]; then func='__custom_mode'
     else
         output "    └── Status: ${ERROR_COLOR}Aborted${NO_COLOR}"
         exit_with_error "$mode: Not supported"
@@ -337,10 +353,8 @@ print_summary() {
 
     cat << EOF
 
-    Summary:
+    Summary: [$passed/$((passed + failed + skipped))]
     --------------------------- 
-    Tests Passed:  $passed
-    Tests Failed:  $failed
     Memory errors: $memory_errors
     Tests Skipped: $skipped
 

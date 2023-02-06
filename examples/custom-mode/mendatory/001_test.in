@@ -1,0 +1,1 @@
+echo abc > /dev/stdout | cat -e < /dev/stdin | rev

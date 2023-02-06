@@ -1,1 +1,0 @@
-/bin/echo aa "|" /usr/bin/grep aa ";" /bin/echo bb "|" /usr/bin/grep bb ";" /bin/echo cc "|" /usr/bin/grep cc ";" /bin/echo dd "|" /usr/bin/grep dd ";"

@@ -1,0 +1,1 @@
+echo a > /dev/null > /dev/stdout

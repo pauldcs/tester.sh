@@ -1,1 +1,0 @@
-"/bin/echo" "aaa" ";" "/usr/bin/yes" "|" "/bin/cat" "-e" "|" "/usr/bin/rev" "|" "/bin/cat" "-e" "|" "/usr/bin/head" ";" "/bin/echo" "bbb" 

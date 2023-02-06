@@ -1,1 +1,0 @@
-"/bin/echo" "aaa" "|" /usr/bin/grep "a" ";" /bin/echo i love my microshell
