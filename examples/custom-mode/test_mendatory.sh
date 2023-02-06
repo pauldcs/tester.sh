@@ -1,2 +1,2 @@
-./tester.sh -p minishell -m custom-mode -i mendatory
+./tester.sh -p minishell -m custom -i mendatory
 rm -rf outfiles

@@ -12,7 +12,7 @@ readonly PROG=$(basename $0)
 #	/*------------------------------------------------------------*/
 
 readonly          DEFAULT_PROGRAM="None"
-readonly             DEFAULT_MODE="args-mode"
+readonly             DEFAULT_MODE="args"
 readonly     DEFAULT_INPUT_SUFFIX="in"
 readonly  DEFAULT_INPUT_DIRECTORY="infiles"
 readonly DEFAULT_OUTPUT_DIRECTORY="outfiles"
@@ -51,10 +51,9 @@ Options
     -m   <mode> (default: '$DEFAULT_MODE')
           The mode in which to run the tests.
           Available modes:
-              - args-mode
-              - path-mode
-              - command-mode 
-
+              - args
+              - path
+              - custom      
     -c    Don't do infile - outfile comparisons.
     
     -v    Run each test case through Valgrind.
@@ -266,9 +265,9 @@ function run_test() {
     output "    └── Input: $input_file"
 
     func="None"
-    if   [ "$mode" = "args-mode"    ]; then func='__args_mode'
-    elif [ "$mode" = "path-mode"    ]; then func='__path_mode'
-    elif [ "$mode" = "custom-mode"  ]; then func='__custom_mode'
+    if   [ "$mode" = "args"   ]; then func='__args_mode'
+    elif [ "$mode" = "path"   ]; then func='__path_mode'
+    elif [ "$mode" = "custom" ]; then func='__custom_mode'
     else
         output "    └── Status: ${ERROR_COLOR}Aborted${NO_COLOR}"
         exit_with_error "$mode: Not supported"
