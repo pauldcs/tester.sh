@@ -1,0 +1,1 @@
+yes 'echo | cat "'echo "'echo'<"'<"<' < /dev/stdin | > /dev/stdout cat | head

@@ -1,0 +1,2 @@
+[31mdarksasuke[39m$ [0mecho abc > /dev/stdout | cat -e < /dev/stdin | rev
+[31mdarksasuke[39m$ [0mexit

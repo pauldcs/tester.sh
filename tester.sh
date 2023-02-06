@@ -239,7 +239,8 @@ function __custom_mode() {
                 --show-leak-kinds=all                        \
                 --track-origins=yes                          \
                 --log-file="$valgrind_log_file"              \
-                --error-exitcode=1                           \
+                --suppressions=leaks.txt                     \
+				--error-exitcode=1                           \
                 ./"$program_name" 2>&- > "$actual_output_file"
     else
         timeout $DEFAULT_TIMEOUT                                         \

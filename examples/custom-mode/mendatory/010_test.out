@@ -1,0 +1,10 @@
+echo | cat "echo 'echo'<<"<
+echo | cat "echo 'echo'<<"<
+echo | cat "echo 'echo'<<"<
+echo | cat "echo 'echo'<<"<
+echo | cat "echo 'echo'<<"<
+echo | cat "echo 'echo'<<"<
+echo | cat "echo 'echo'<<"<
+echo | cat "echo 'echo'<<"<
+echo | cat "echo 'echo'<<"<
+echo | cat "echo 'echo'<<"<

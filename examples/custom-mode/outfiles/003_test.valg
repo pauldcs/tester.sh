@@ -1,0 +1,4 @@
+
+
+[31mdarksasuke[39m$ [0mecho a > /dev/null > /dev/stdout
+[31mdarksasuke[39m$ [0mexit
